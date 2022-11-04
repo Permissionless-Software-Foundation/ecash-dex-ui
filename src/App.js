@@ -18,14 +18,13 @@ import AppBody from './components/app-body'
 import LoadLocalStorage from './components/load-localstorage'
 
 // Default restURL for a back-end server.
-let serverUrl = 'https://free-bch.fullstack.cash'
+// let serverUrl = 'https://free-bch.fullstack.cash'
+let serverUrl = 'https://xec-consumer-or1-usa.fullstackcash.nl'
 
 // Default alternative servers.
 const defaultServerOptions = [
-  { value: 'https://free-bch.fullstack.cash', label: 'https://free-bch.fullstack.cash' },
-  { value: 'https://bc01-ca-bch-consumer.fullstackcash.nl', label: 'https://bc01-ca-bch-consumer.fullstackcash.nl' },
-  { value: 'https://pdx01-usa-bch-consumer.fullstackcash.nl', label: 'https://pdx01-usa-bch-consumer.fullstackcash.nl' },
-  { value: 'https://wa-usa-bch-consumer.fullstackcash.nl', label: 'https://wa-usa-bch-consumer.fullstackcash.nl' }
+  { value: 'https://xec-consumer-or1-usa.fullstackcash.nl', label: 'https://xec-consumer-or1-usa.fullstackcash.nl' },
+  { value: 'https://wa-usa-xec-consumer.fullstackcash.nl', label: 'https://wa-usa-xec-consumer.fullstackcash.nl' }
 ]
 
 let _this
@@ -91,7 +90,7 @@ class App extends React.Component {
 
   async componentDidMount () {
     try {
-      this.addToModal('Loading minimal-slp-wallet')
+      this.addToModal('Loading minimal-ecash-wallet')
 
       this.setState({
         denyClose: true
@@ -114,15 +113,15 @@ class App extends React.Component {
       })
 
       // Get the BCH balance of the wallet.
-      this.addToModal('Getting BCH balance')
+      this.addToModal('Getting eCash balance')
       await this.asyncLoad.getWalletBchBalance(bchWallet, this.updateBchWalletState)
 
       // Get the SLP tokens held by the wallet.
-      this.addToModal('Getting SLP tokens')
+      this.addToModal('Getting eTokens')
       await this.asyncLoad.getSlpTokenBalances(bchWallet, this.updateBchWalletState)
 
       // Get the SLP tokens held by the wallet.
-      this.addToModal('Getting BCH spot price in USD')
+      this.addToModal('Getting eCash spot price in USD')
       await this.asyncLoad.getUSDExchangeRate(bchWallet, this.updateBchWalletState)
       // console.log('this.state.appData.bchUsdPrice')
 

@@ -13,9 +13,9 @@ const config = {
 
   // Backup Info that goes into the Footer.
   ghPagesUrl: 'https://permissionless-software-foundation.github.io/bch-wallet-web3-android/',
-  fullstackUrl: 'https://bchn-wallet.fullstack.cash',
+  fullstackUrl: 'https://xec-dex.fullstack.cash',
   apkUrl: 'https://github.com/Permissionless-Software-Foundation/bch-wallet-web3-android/blob/master/android/apk/bch-web3-wallet.apk',
-  ghRepo: 'https://github.com/Permissionless-Software-Foundation/bch-wallet-web3-android',
+  ghRepo: 'https://github.com/Permissionless-Software-Foundation/ecash-dex-ui',
   radicleUrl: 'https://app.radicle.network/seeds/maple.radicle.garden/rad:git:hnrkd5cjwwb5tzx37hq9uqm5ubon7ee468xcy/remotes/hyyycncbn9qzqmobnhjq9rry6t4mbjiadzjoyhaknzxjcz3cxkpfpc',
   filecoinRepo: 'https://bafybeihjei6hnl5dxau2ivnilnruqjql5ge6y5ncirljci5tcwnkx4dsju.ipfs.w3s.link/'
 }

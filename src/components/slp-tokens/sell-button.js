@@ -167,8 +167,8 @@ class SellButton extends React.Component {
       // const avaxSpotPrice = request.data.usd
       // console.log('avaxSpotPrice: ', avaxSpotPrice)
 
-      const bchSpotPrice = this.state.appData.bchWalletState.bchUsdPrice
-      console.log('BCH spot price: ', bchSpotPrice)
+      const bchSpotPrice = this.state.appData.bchWalletState.bchUsdPrice * 1000000
+      console.log('XEC spot price: ', bchSpotPrice)
 
       // Validate the price-per-token input.
       let pricePerToken = this.state.pricePerToken
@@ -207,9 +207,10 @@ class SellButton extends React.Component {
       // console.log('result.data: ', result.data)
 
       const p2wdbHash = result.data.hash
+      console.log(`p2wdbHash: ${p2wdbHash}`)
 
       this.setState({
-        statusMsg: (<p><b>Success!</b> Offer Created and updated to <a href={`https://p2wdb.fullstack.cash/entry/hash/${p2wdbHash}`} target='_blank' rel='noreferrer'>P2WDB</a>!</p>),
+        statusMsg: (<p><b>Success!</b> Offer Created and updated to <a href='https://xec-explorer.p2wdb.com/' target='_blank' rel='noreferrer'>P2WDB</a>!</p>),
         hideSpinner: true,
         sendQtyStr: '',
         pricePerTokenStr: '',

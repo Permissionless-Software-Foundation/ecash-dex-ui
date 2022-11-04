@@ -31,7 +31,7 @@ class WalletSummary extends React.Component {
   }
 
   render () {
-    // console.log(`WalletSummary render() this.state.bchWalletState: ${JSON.stringify(this.state.bchWalletState, null, 2)}`)
+    console.log(`WalletSummary render() this.state.bchWalletState: ${JSON.stringify(this.state.bchWalletState, null, 2)}`)
 
     const eyeIcon = {
       mnemonic: _this.state.blurredMnemonic ? faEyeSlash : faEye,
@@ -73,6 +73,26 @@ class WalletSummary extends React.Component {
                       </Col>
                       <Col xs={6} sm={1} lg={2} style={{ textAlign: 'center' }}>
                         <CopyOnClick walletProp='privateKey' appData={this.state.appData} />
+                      </Col>
+                    </Row>
+
+                    <Row style={{ padding: '25px' }}>
+                      <Col xs={12} sm={10} lg={8} style={{ padding: '10px' }}>
+                        <b>eCash Address:</b> {this.state.bchWalletState.eCashAddress}
+                      </Col>
+                      <Col xs={6} sm={1} lg={2} style={{ textAlign: 'center' }} />
+                      <Col xs={6} sm={1} lg={2} style={{ textAlign: 'center' }}>
+                        <CopyOnClick walletProp='eCashAddress' appData={this.state.appData} />
+                      </Col>
+                    </Row>
+
+                    <Row style={{ padding: '25px', backgroundColor: '#eee' }}>
+                      <Col xs={12} sm={10} lg={8} style={{ padding: '10px' }}>
+                        <b>eToken Address:</b> {this.state.bchWalletState.eTokenAddress}
+                      </Col>
+                      <Col xs={6} sm={1} lg={2} style={{ textAlign: 'center' }} />
+                      <Col xs={6} sm={1} lg={2} style={{ textAlign: 'center' }}>
+                        <CopyOnClick walletProp='eTokenAddress' appData={this.state.appData} />
                       </Col>
                     </Row>
 
