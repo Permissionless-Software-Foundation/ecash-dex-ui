@@ -150,9 +150,6 @@ class App extends React.Component {
   }
 
   render () {
-    const tempServer = process.env.REACT_APP_SERVER
-    console.log(`tempServer: ${tempServer}`)
-
     // console.log('App component rendered. this.state.wallet: ', this.state.wallet)
     // console.log(`App component menuState: ${this.state.menuState}`)
     // console.log(`render() this.state.serverUrl: ${this.state.serverUrl}`)
