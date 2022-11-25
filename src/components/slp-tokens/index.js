@@ -98,31 +98,34 @@ class SlpTokens extends React.Component {
         const wallet = this.state.appData.bchWallet
 
         // Retrieve token data from psf-slp-indexer.
-        const tokenData = await wallet.getTokenData(thisToken.tokenId)
+        const tokenData = await wallet.getTokenData2(thisToken.tokenId)
         // console.log(`tokenData: ${JSON.stringify(tokenData, null, 2)}`)
 
-        // If the token has mutable data, then try to retrieve it from IPFS.
-        if (tokenData.mutableData && tokenData.mutableData.includes('ipfs://')) {
-          const cid = tokenData.mutableData.substring(7)
-          // console.log('cid')
+        // If the token has mutable data, then try to load the token icon.
+        if (tokenData.mutableData) {
+          if (tokenData.optimizedTokenIcon) {
+            const tokenIcon = tokenData.optimizedTokenIcon
 
-          // Retrieve the mutable data from Filecoin/IPFS.
-          const url = `https://${cid}.ipfs.dweb.link/data.json`
-          const result = await axios.get(url)
+            const newIcon = (
+              <Card.Img src={tokenIcon} style={{ width: '100px' }} />
+            )
 
-          const mutableData = result.data
-          // console.log(`mutableData: ${JSON.stringify(mutableData, null, 2)}`)
+            tokenFound = true
 
-          const tokenIcon = mutableData.tokenIcon
+            // Add the JSX for the icon to the token object.
+            thisToken.icon = newIcon
+          } else if (tokenData.tokenIcon) {
+            const tokenIcon = tokenData.tokenIcon
 
-          const newIcon = (
-            <Card.Img src={tokenIcon} style={{ width: '100px' }} />
-          )
+            const newIcon = (
+              <Card.Img src={tokenIcon} style={{ width: '100px' }} />
+            )
 
-          tokenFound = true
+            tokenFound = true
 
-          // Add the JSX for the icon to the token object.
-          thisToken.icon = newIcon
+            // Add the JSX for the icon to the token object.
+            thisToken.icon = newIcon
+          }
         }
       }
 
