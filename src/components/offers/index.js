@@ -123,12 +123,12 @@ class Offers extends React.Component {
 
     for (let i = 0; i < offerRawData.length; i++) {
       const thisOffer = offerRawData[i]
-      // console.log(`thisOffer: ${JSON.stringify(thisOffer, null, 2)}`)
+      console.log(`thisOffer: ${JSON.stringify(thisOffer, null, 2)}`)
 
       // Get and format the token ID
       const tokenId = thisOffer.tokenId
       const smallTokenId = this.cutString(tokenId)
-      thisOffer.tokenId = (<a href={`https://token.fullstack.cash/?tokenid=${tokenId}`} target='_blank' rel='noreferrer'>{smallTokenId}</a>)
+      thisOffer.tokenId = (<a href={`https://etoken.fullstack.cash/?tokenid=${tokenId}`} target='_blank' rel='noreferrer'>{smallTokenId}</a>)
 
       // Get and format the P2WDB ID
       const p2wdbHash = thisOffer.p2wdbHash
@@ -136,20 +136,36 @@ class Offers extends React.Component {
 
       thisOffer.button = (<Button text='Buy' variant='success' size='lg' id={p2wdbHash} onClick={this.handleBuy}>Buy</Button>)
 
-      thisOffer.p2wdbHash = (<a href={`https://p2wdb.fullstack.cash/entry/hash/${p2wdbHash}`} target='_blank' rel='noreferrer'>{smallP2wdbHash}</a>)
+      thisOffer.p2wdbHash = (<a href={`https://xec-p2wdb.fullstack.cash/entry/hash/${p2wdbHash}`} target='_blank' rel='noreferrer'>{smallP2wdbHash}</a>)
 
-      // Convert sats to BCH, and then calculate cost in USD.
       const bchjs = this.state.appData.bchWallet.bchjs
+
+      // Cost of token in sats
       const rateInSats = parseInt(thisOffer.rateInBaseUnit)
-      // console.log('rateInSats: ', rateInSats)
+      console.log('rateInSats: ', rateInSats)
+
+      // Cost of XEC in USD
       const bchCost = bchjs.BitcoinCash.toBitcoinCash(rateInSats)
-      // console.log('bchCost: ', bchCost)
-      // console.log('this.state.appData.bchWalletState.bchUsdPrice: ', this.state.appData.bchWalletState.bchUsdPrice)
-      // console.log('bchUsdPrice: ', this.state.appData.bchWalletState.bchUsdPrice)
-      const usdPrice = bchCost * this.state.appData.bchWalletState.bchUsdPrice
-      // usdPrice = bchjs.Util.floor2(usdPrice)
-      const priceStr = `$${usdPrice.toFixed(3)}`
-      thisOffer.usdPrice = priceStr
+      console.log('bchCost: ', bchCost)
+
+      // Cost of XEC per sat
+      const satCost = bchCost / 100
+
+      // I'm not sure where the extra divide by 10 is coming from.
+      thisOffer.usdPrice = satCost * rateInSats / 10 * thisOffer.numTokens
+      console.log(`thisOffer.usdPrice: ${thisOffer.usdPrice}`)
+      thisOffer.usdPrice = `$${thisOffer.usdPrice.toFixed(3)}`
+
+      // const rateInSats = parseInt(thisOffer.rateInBaseUnit)
+      // // console.log('rateInSats: ', rateInSats)
+      // const bchCost = bchjs.BitcoinCash.toBitcoinCash(rateInSats)
+      // // console.log('bchCost: ', bchCost)
+      // // console.log('this.state.appData.bchWalletState.bchUsdPrice: ', this.state.appData.bchWalletState.bchUsdPrice)
+      // // console.log('bchUsdPrice: ', this.state.appData.bchWalletState.bchUsdPrice)
+      // const usdPrice = bchCost * this.state.appData.bchWalletState.bchUsdPrice
+      // // usdPrice = bchjs.Util.floor2(usdPrice)
+      // const priceStr = `$${usdPrice.toFixed(3)}`
+      // thisOffer.usdPrice = priceStr
 
       offers.push(thisOffer)
     }

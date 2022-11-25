@@ -29,6 +29,8 @@ class NFTs extends React.Component {
       page: 0
     }
 
+    // console.log('NFT app data: ', props.appData)
+
     // Bind this object to event handlers
     this.handleOffers = this.handleOffers.bind(this)
     this.handleNextPage = this.handleNextPage.bind(this)
@@ -151,21 +153,27 @@ class NFTs extends React.Component {
       // rawOffers.map(x => x.icon = (<Jdenticon size='100' value={x.tokenId} />))
       for (let i = 0; i < rawOffers.length; i++) {
         const thisOffer = rawOffers[i]
+        console.log('thisOffer: ', thisOffer)
 
         thisOffer.icon = (<Jdenticon size='100' value={thisOffer.tokenId} />)
         thisOffer.iconDownloaded = false
 
-        // Convert sats to BCH, and then calculate cost in USD.
         const bchjs = this.state.appData.bchWallet.bchjs
+
+        // Cost of token in sats
         const rateInSats = parseInt(thisOffer.rateInBaseUnit)
-        // console.log('rateInSats: ', rateInSats)
+        console.log('rateInSats: ', rateInSats)
+
+        // Cost of XEC in USD
         const bchCost = bchjs.BitcoinCash.toBitcoinCash(rateInSats)
-        // console.log('bchCost: ', bchCost)
-        // console.log('bchUsdPrice: ', this.state.appData.bchUsdPrice)
-        let usdPrice = bchCost * this.state.appData.bchWalletState.bchUsdPrice * thisOffer.numTokens
-        usdPrice = bchjs.Util.floor2(usdPrice)
-        const priceStr = `$${usdPrice.toFixed(2)}`
-        thisOffer.usdPrice = priceStr
+        console.log('bchCost: ', bchCost)
+
+        // Cost of XEC per sat
+        const satCost = bchCost / 100
+
+        // I'm not sure where the extra divide by 100 is coming from.
+        thisOffer.usdPrice = satCost * rateInSats / 100
+        console.log(`thisOffer.usdPrice: ${thisOffer.usdPrice}`)
       }
 
       return rawOffers
@@ -279,7 +287,10 @@ class NFTs extends React.Component {
       let tokenData = thisOffer.tokenData
       if (!tokenData) {
         // Get the token data from psf-slp-indexer
-        tokenData = await wallet.getTokenData(thisOffer.tokenId)
+        tokenData = await wallet.getTokenData2(thisOffer.tokenId)
+        console.log(`tokenData: ${JSON.stringify(tokenData, null, 2)}`)
+
+        tokenData.genesisData = tokenData.tokenStats
       }
 
       // Get the token data from psf-slp-indexer
@@ -287,28 +298,55 @@ class NFTs extends React.Component {
       // console.log(`tokenData: ${JSON.stringify(tokenData, null, 2)}`)
 
       // If the token has mutable data, then try to retrieve it from IPFS.
-      if (!thisOffer.iconDownloaded && tokenData.mutableData && tokenData.mutableData.includes('ipfs://')) {
-        const cid = tokenData.mutableData.substring(7)
-        // console.log('cid')
+      if (!thisOffer.iconDownloaded && tokenData.mutableData) {
+        if (tokenData.optimizedTokenIcon) {
+          const tokenIcon = tokenData.optimizedTokenIcon
 
-        // Retrieve the mutable data from Filecoin/IPFS.
-        const url = `https://${cid}.ipfs.dweb.link/data.json`
-        const result = await axios.get(url)
+          const newIcon = (
+            <Card.Img src={tokenIcon} style={{ width: '100px' }} />
+          )
 
-        const mutableData = result.data
-        // console.log(`mutableData: ${JSON.stringify(mutableData, null, 2)}`)
+          tokenFound = true
 
-        const tokenIcon = mutableData.tokenIcon
+          // Add the JSX for the icon to the token object.
+          thisOffer.icon = newIcon
+          thisOffer.mutableData = tokenData.mutableData
+        } else if (tokenData.tokenIcon) {
+          const tokenIcon = tokenData.tokenIcon
 
-        const newIcon = (
-          <Card.Img src={tokenIcon} />
-        )
+          const newIcon = (
+            <Card.Img src={tokenIcon} style={{ width: '100px' }} />
+          )
 
-        tokenFound = true
+          tokenFound = true
 
-        // Add the JSX for the icon to the token object.
-        thisOffer.icon = newIcon
-        thisOffer.mutableData = mutableData
+          // Add the JSX for the icon to the token object.
+          thisOffer.icon = newIcon
+          thisOffer.mutableData = tokenData.mutableData
+        }
+
+        //
+        // const cid = tokenData.mutableData.substring(7)
+        // // console.log('cid')
+        //
+        // // Retrieve the mutable data from Filecoin/IPFS.
+        // const url = `https://${cid}.ipfs.dweb.link/data.json`
+        // const result = await axios.get(url)
+        //
+        // const mutableData = result.data
+        // // console.log(`mutableData: ${JSON.stringify(mutableData, null, 2)}`)
+        //
+        // const tokenIcon = mutableData.tokenIcon
+        //
+        // const newIcon = (
+        //   <Card.Img src={tokenIcon} />
+        // )
+        //
+        // tokenFound = true
+        //
+        // // Add the JSX for the icon to the token object.
+        // thisOffer.icon = newIcon
+        // thisOffer.mutableData = mutableData
       }
 
       // If the token does not have mutable data to store icon data,
