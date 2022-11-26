@@ -69,7 +69,9 @@ class AsyncLoad {
   // Get the spot exchange rate for BCH in USD.
   async getUSDExchangeRate (wallet, updateBchWalletState) {
     const bchUsdPrice = await wallet.getUsd()
-    // console.log('bchUsdPrice: ', bchUsdPrice)
+    console.log('eCash USD price: ', bchUsdPrice)
+    console.log(`BCHA USD price: ${bchUsdPrice * 1000000}`)
+    console.log(`USD per sat: ${bchUsdPrice / 100}`)
 
     // Update the state of the wallet
     updateBchWalletState({ bchUsdPrice })
