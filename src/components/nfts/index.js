@@ -158,22 +158,36 @@ class NFTs extends React.Component {
         thisOffer.icon = (<Jdenticon size='100' value={thisOffer.tokenId} />)
         thisOffer.iconDownloaded = false
 
-        const bchjs = this.state.appData.bchWallet.bchjs
-
         // Cost of token in sats
         const rateInSats = parseInt(thisOffer.rateInBaseUnit)
         console.log('rateInSats: ', rateInSats)
 
-        // Cost of XEC in USD
-        const bchCost = bchjs.BitcoinCash.toBitcoinCash(rateInSats)
-        console.log('bchCost: ', bchCost)
+        // const bchaPrice = this.state.appData.bchWalletState.bchUsdPrice * 1000000
+        const bchaPrice = this.state.appData.bchWalletState.bchUsdPrice / 100
+        console.log('bchaPrice: ', bchaPrice)
 
-        // Cost of XEC per sat
-        const satCost = bchCost / 100
-
-        // I'm not sure where the extra divide by 100 is coming from.
-        thisOffer.usdPrice = satCost * rateInSats / 100
+        // I'm not sure where the extra divide by 10 is coming from.
+        // thisOffer.usdPrice = satCost * rateInSats * thisOffer.numTokens
+        thisOffer.usdPrice = bchaPrice * rateInSats * thisOffer.numTokens
         console.log(`thisOffer.usdPrice: ${thisOffer.usdPrice}`)
+        thisOffer.usdPrice = `$${thisOffer.usdPrice.toFixed(3)}`
+
+        // const bchjs = this.state.appData.bchWallet.bchjs
+        //
+        // // Cost of token in sats
+        // const rateInSats = parseInt(thisOffer.rateInBaseUnit)
+        // console.log('rateInSats: ', rateInSats)
+        //
+        // // Cost of XEC in USD
+        // const bchCost = bchjs.BitcoinCash.toBitcoinCash(rateInSats)
+        // console.log('bchCost: ', bchCost)
+        //
+        // // Cost of XEC per sat
+        // const satCost = bchCost / 100
+        //
+        // // I'm not sure where the extra divide by 100 is coming from.
+        // thisOffer.usdPrice = satCost * rateInSats / 100
+        // console.log(`thisOffer.usdPrice: ${thisOffer.usdPrice}`)
       }
 
       return rawOffers
